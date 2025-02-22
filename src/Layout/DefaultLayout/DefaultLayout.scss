@@ -1,0 +1,10 @@
+.default_container{
+    display: flex;
+    gap: 10px;
+}
+.default_content{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
