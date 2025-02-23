@@ -50,8 +50,12 @@ function DagNhapLayout () {
             autoClose: 2000
           })
         } else {
-          localStorage.setItem('data', data)
-          window.location.href = '/trangchu?tab=Nhân Viên'
+          sessionStorage.setItem('data', JSON.stringify(data))
+          if (data.user.role === 'admin') {
+            window.location.href = '/trangchu?tab=Nhân Viên'
+          } else {
+            window.location.href = '/trangchu?tab=Chấm Công'
+          }
         }
       }
     } catch (error) {

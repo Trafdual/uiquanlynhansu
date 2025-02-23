@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react'
 import { FaEdit, FaPlus, FaSignal } from 'react-icons/fa'
 
-import { FaMobile, FaTrashCan } from 'react-icons/fa6'
+import { FaTrashCan } from 'react-icons/fa6'
 import './QuanLyNhanVienLayout.scss'
 import moment from 'moment'
-
+import { AddNhanVien } from './AddNhanVien'
+import { UpdateNhanVien } from './UpdateNhanVien'
+import { XoaNhanVien } from './XoaNhanVien'
+import { ChamCongLayoutAdmin } from '../ChamCongLayoutAdmin'
 function QuanLyNhanVienLayout () {
   const [data, setData] = useState([])
   const [selectedIds, setSelectedIds] = useState([])
   const [selectAll, setSelectAll] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [isOpenSp, setisOpenSp] = useState(false)
   const [isOpenXoaTL, setisOpenXoaTL] = useState(false)
   const [isOpenCapNhat, setisOpenCapNhat] = useState(false)
-  const [isOpenDungLuong, setisOpenDungLuong] = useState(false)
+  const [isOpenChamCong, setisOpenChamCong] = useState(false)
 
   const fetchdata = async () => {
     try {
@@ -50,6 +52,26 @@ function QuanLyNhanVienLayout () {
     setSelectedIds(newSelectedIds)
 
     setSelectAll(newSelectedIds.length === data.length)
+  }
+
+  const handleRoleChange = async (id, value) => {
+    try {
+      const response = await fetch(`http://localhost:8080/setrole/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          role: value
+        })
+      })
+
+      if (response.ok) {
+        fetchdata()
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -94,12 +116,12 @@ function QuanLyNhanVienLayout () {
             } else if (selectedIds.length > 1) {
               alert('Chỉ được chọn một nhân viên để xem dung lượng')
             } else {
-              setisOpenDungLuong(true)
+              setisOpenChamCong(true)
             }
           }}
         >
           <FaSignal className='icons' />
-          Dung lượng
+          Chấm công
         </button>
       </div>
 
@@ -120,6 +142,7 @@ function QuanLyNhanVienLayout () {
             <th>Số điện thoại</th>
             <th>Email</th>
             <th>Chức vụ</th>
+            <th>Quyền</th>
           </tr>
         </thead>
         <tbody>
@@ -140,6 +163,17 @@ function QuanLyNhanVienLayout () {
                 <td>{item.sodienthoai}</td>
                 <td>{item.email}</td>
                 <td>{item.chucvu}</td>
+
+                <td>
+                  <select
+                    value={item.user.role}
+                    className='custom-select'
+                    onChange={e => handleRoleChange(item._id, e.target.value)}
+                  >
+                    <option value='nhanvien'>Nhân viên</option>
+                    <option value='admin'>Admin</option>
+                  </select>
+                </td>
               </tr>
             ))
           ) : (
@@ -149,6 +183,29 @@ function QuanLyNhanVienLayout () {
           )}
         </tbody>
       </table>
+      <AddNhanVien
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        fetchdata={fetchdata}
+      />
+      <UpdateNhanVien
+        isOpen={isOpenCapNhat}
+        onClose={() => setisOpenCapNhat(false)}
+        fetchdata={fetchdata}
+        idnhanvien={selectedIds}
+      />
+      <XoaNhanVien
+        isOpen={isOpenXoaTL}
+        onClose={() => setisOpenXoaTL(false)}
+        idnhanvien={selectedIds}
+        fetchdata={fetchdata}
+        setSelectedIds={setSelectedIds}
+      />
+      <ChamCongLayoutAdmin
+        isModalOpen={isOpenChamCong}
+        setIsModalOpen={setisOpenChamCong}
+        idnhanvien={selectedIds}
+      />
     </div>
   )
 }

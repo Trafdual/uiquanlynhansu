@@ -74,7 +74,7 @@ function DagNhapLayout () {
           })
 
           localStorage.setItem('data', data)
-          window.location.href = '/login'
+          window.location.href = '/'
         }
       }
     } catch (error) {
@@ -240,7 +240,7 @@ function DagNhapLayout () {
           <div className='register_button'>
             <button onClick={handleregister}>Đăng ký</button>
             <p>
-              Bạn đã có tài khoản? <a href='/login'>Đăng nhập</a>
+              Bạn đã có tài khoản? <a href='/'>Đăng nhập</a>
             </p>
           </div>
         </div>

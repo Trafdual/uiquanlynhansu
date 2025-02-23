@@ -2,6 +2,8 @@ import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 import { useSearchParams } from 'react-router-dom'
 import { QuanLyNhanVienLayout } from '../QuanLyNhanVienLayout'
+import { ChamCongLayout } from '../ChamCongLayout'
+import { MaQrLayout } from '../MaQrLayout'
 import './DefaultLayout.scss'
 
 function DefaultLayout () {
@@ -14,7 +16,9 @@ function DefaultLayout () {
 
       <div className='default_content'>
         <Header />
+        {tabFromUrl === 'Mã QR' && <MaQrLayout />}
         {tabFromUrl === 'Nhân Viên' && <QuanLyNhanVienLayout />}
+        {tabFromUrl === 'Chấm Công' && <ChamCongLayout />}
       </div>
     </div>
   )
