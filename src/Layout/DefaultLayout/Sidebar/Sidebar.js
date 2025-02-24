@@ -12,9 +12,9 @@ import { useNavigate } from 'react-router-dom'
 
 function Sidebar ({ activeTab }) {
   const [istoggle, setIstoggle] = useState(true)
-  const navigate = useNavigate() // Hook để chuyển trang
+  const navigate = useNavigate()
 
-  const data = JSON.parse(sessionStorage.getItem('data')) // Chuyển chuỗi JSON về object
+  const data = JSON.parse(sessionStorage.getItem('data'))
 
   const handleLogout = () => {
     sessionStorage.clear()
@@ -66,7 +66,9 @@ function Sidebar ({ activeTab }) {
         <div className={`sidebar_logo ${istoggle ? 'show' : 'hide'}`}>
           <h3>
             {data.user.role === 'admin'
-              ? 'Admin'
+              ? data.nhanvien
+                ? `${data.nhanvien.hoten} - ${data.nhanvien.manv}`
+                : 'Admin'
               : `${data.nhanvien.hoten} - ${data.nhanvien.manv}`}
           </h3>
         </div>
